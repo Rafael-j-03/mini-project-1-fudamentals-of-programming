@@ -14,81 +14,200 @@ day = 0
 #Inventory and items
 class Player:
     gold = 250
+    experience = 0
     resources_inventory = []
     items_inventory = []
     
 class Item:
     gold = 1
+    canSell = True
     
     def __init__(self,name,gold):
         self.name = name
         self.gold = gold
-        
-    def item_gold(self,gold):
-        self.gold = gold
     
     def display(self):
         print("Item:", self.name)
-        print("Sell value;", self.gold)
+        print("Sell value:", self.gold)
+        
+    def sell(self):
+        if (self.canSell == True):
+            return True
+        else:
+            return False
     
-class Wood(Item):
+class Wood(Item): #Wood
+    canSell = False
     gold = 2
+    canSell = False
     def __init__(self):
         super().__init__("Wood", self.gold)
+    
+    def sell(self):
+        return super().sell()
         
-class Leather(Item):
+class Leather(Item): #Leather
+    canSell = False
     gold = 3
     def __init__(self):
         super().__init__("Leather", self.gold)
+    
+    def sell(self):
+        return super().sell()
         
-class Iron(Item):
+class Iron(Item): #Iron
+    canSell = False
     gold = 5 
     def __init__(self):
         super().__init__("Iron", self.gold)
         
-class Gold(Item):
+    def sell(self):
+        return super().sell()
+    
+class Gold(Item): #Gold
+    canSell = False
     gold = 20
     def __init__(self):
         super().__init__("Gold", self.gold)
+    
+    def sell(self):
+        return super().sell()
         
-class Sword(Item):
+class Sword(Item): #Sword
+    canSell = True
     gold = 400
     def __init__(self):
         super().__init__("Sword", self.gold)
         
-class Hammer(Item):
+    def sell(self):
+        return super().sell()
+    
+    class Sword_Recipe(Item): #Sword recipe
+        canSell = False
+        gold = 150
+
+        def __init__(self):
+            super().__init__("Sword Recipe", self.gold)
+        
+        def sell(self):
+            return super().sell()
+
+class Hammer(Item): #Hammer
+    canSell = True
     gold = 200
     def __init__(self):
         super().__init__("Hammer", self.gold)
         
-class Bow(Item):
+    def sell(self):
+        return super().sell()
+
+    class Hammer_Recipe(Item): #Hammer recipe
+        canSell = False
+        gold = 150
+
+        def __init__(self):
+            super().__init__("Hammer Recipe", self.gold)
+        
+        def sell(self):
+            return super().sell()
+        
+class Bow(Item): #Bow
+    canSell = True
     gold = 150
     def __init__(self):
         super().__init__("Bow", self.gold)
         
-class Helm(Item):
+    def sell(self):
+        return super().sell()
+        
+    class Bow_Recipe(Item): #Bow recipe
+        canSell = False
+        gold = 100
+
+        def __init__(self):
+            super().__init__("Bow Recipe", self.gold)
+        
+        def sell(self):
+            return super().sell()
+        
+class Helm(Item): #Helm
+    canSell = True
     gold = 100
     def __init__(self):
         super().__init__("Helm", self.gold)
+    
+    def sell(self):
+        return super().sell()
+
+    class Helm_Recipe(Item): #Helm recipe
+        canSell = False
+        gold = 100
+
+        def __init__(self):
+            super().__init__("Helm Recipe", self.gold)
         
-class Chest(Item):
+        def sell(self):
+            return super().sell()
+        
+class Chest(Item): #Chest
+    canSell = True
     gold = 225
     def __init__(self):
         super().__init__("Chest", self.gold)
+    
+    def sell(self):
+        return super().sell()
+    
+    class Chest_Recipe(Item): #Chest recipe
+        canSell = False
+        gold = 250
+
+        def __init__(self):
+            super().__init__("Chest Recipe", self.gold)
         
-class Feet(Item):
+        def sell(self):
+            return super().sell()
+        
+class Feet(Item): #Feet
+    canSell = True
     gold = 85
     def __init__(self):
         super().__init__("Feet", self.gold)
+    
+    def sell(self):
+        return super().sell()
+
+    class Feet_Recipe(Item): #Feet recipe
+        canSell = False
+        gold = 100
+
+        def __init__(self):
+            super().__init__("Fett Recipe", self.gold)
+        
+        def sell(self):
+            return super().sell()
 
 #Principal game loop
 def game_loop(day):
     #Setting classes into variables
+    player = Player()
     myWood = Wood()
     myLeather = Leather()
     myIron = Iron()
     myGold = Gold()
-    player = Player()
+    sword = Sword()
+    hammer = Hammer()
+    bow = Bow()
+    helm = Helm()
+    chest = Chest()
+    feet = Feet()
+    sword_recipe = Sword.Sword_Recipe()
+    hammer_recipe = Hammer.Hammer_Recipe()
+    bow_recipe = Bow.Bow_Recipe()
+    helm_recipe = Helm.Helm_Recipe()
+    chest_recipe = Chest.Chest_Recipe()
+    feet_recipe = Feet.Feet_Recipe()
+    
     
     #The game will continue until the player has no gold or gets 100k
     while (player.gold >= 0) and (player.gold <= 100000):
@@ -162,7 +281,70 @@ def game_loop(day):
                     buy_resources() #Executes the function
                 
                 elif command == "2": #Let the player buy recipes
-                    pass
+                    def buy_recipes():
+                        os.system('clear') #Clear the previous console information and messages
+                        print ("Gold: " + str(player.gold) + "\n")
+                        command = input("1. Sword recipe " + str(sword_recipe.gold) +
+                                        "\n2. Hammer recipe: " + str(hammer_recipe.gold) +
+                                        "\n3. Bow recipe: " + str(bow_recipe.gold) +
+                                        "\n4. Helm recipe: " + str(helm_recipe.gold) + 
+                                        "\n5. Chest recipe: " + str(chest_recipe.gold) + 
+                                        "\n6. Feet recipe: " + str(feet_recipe.gold) + "\n")
+                        if command == "1": #Buy sword recipe
+                            if player.gold >= sword_recipe.gold:
+                                player.gold -= sword_recipe.gold
+                                player.items_inventory.append(sword_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        elif command == "2": #Buy Hammer recipe
+                            if player.gold >= hammer_recipe.gold:
+                                player.gold -= hammer_recipe.gold
+                                player.items_inventory.append(hammer_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        elif command == "3": #Buy Bow recipe
+                            if player.gold >= bow_recipe.gold:
+                                player.gold -= bow_recipe.gold
+                                player.items_inventory.append(bow_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        elif command == "4": #Buy Helm recipe
+                            if player.gold >= helm_recipe.gold:
+                                player.gold -= helm_recipe.gold
+                                player.items_inventory.append(helm_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        elif command == "5": #Chest recipe
+                            if player.gold >= chest_recipe.gold:
+                                player.gold -= chest_recipe.gold
+                                player.items_inventory.append(chest_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        elif command == "6": #Buy Feet recipe
+                            if player.gold >= feet_recipe.gold:
+                                player.gold -= feet_recipe.gold
+                                player.items_inventory.append(feet_recipe)
+                            else:
+                                print("\nYou do not have enough gold to buy this!")
+                                print(input("\nPress ENTER to continue!"))
+                                buy_recipes() #Get back to the recipes buy menu
+                        else:
+                            print("\nChoose a right action!")
+                            print(input("\nPress ENTER to continue!"))
+                            buy_recipes() #Get back to the recipes buy menu
+                        
+                    buy_recipes() #Start the function
+                    
                 else:
                     print("\nChoose a right action!")
                     print(input("\nPress ENTER to continue"))
