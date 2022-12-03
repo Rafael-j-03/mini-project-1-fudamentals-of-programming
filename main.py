@@ -86,8 +86,8 @@ class Sword(Item): #Sword
         canSell = False
         gold = 150
 
-        def __init__(self):
-            super().__init__("Sword Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -105,8 +105,8 @@ class Hammer(Item): #Hammer
         canSell = False
         gold = 150
 
-        def __init__(self):
-            super().__init__("Hammer Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -124,8 +124,8 @@ class Bow(Item): #Bow
         canSell = False
         gold = 100
 
-        def __init__(self):
-            super().__init__("Bow Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -138,13 +138,13 @@ class Helm(Item): #Helm
     
     def sell(self):
         return super().sell()
-
+    
     class Helm_Recipe(Item): #Helm recipe
         canSell = False
         gold = 100
 
-        def __init__(self):
-            super().__init__("Helm Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -162,8 +162,8 @@ class Chest(Item): #Chest
         canSell = False
         gold = 250
 
-        def __init__(self):
-            super().__init__("Chest Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -181,8 +181,8 @@ class Feet(Item): #Feet
         canSell = False
         gold = 100
 
-        def __init__(self):
-            super().__init__("Fett Recipe", self.gold)
+        def display(self):
+            print("Item:", self.name)
         
         def sell(self):
             return super().sell()
@@ -201,12 +201,12 @@ def game_loop(day):
     helm = Helm()
     chest = Chest()
     feet = Feet()
-    sword_recipe = Sword.Sword_Recipe()
-    hammer_recipe = Hammer.Hammer_Recipe()
-    bow_recipe = Bow.Bow_Recipe()
-    helm_recipe = Helm.Helm_Recipe()
-    chest_recipe = Chest.Chest_Recipe()
-    feet_recipe = Feet.Feet_Recipe()
+    sword_recipe = Sword.Sword_Recipe("Sword recipe", Sword.Sword_Recipe.gold)
+    hammer_recipe = Hammer.Hammer_Recipe("Hammer recipe", Hammer.Hammer_Recipe.gold)
+    bow_recipe = Bow.Bow_Recipe("Bow recipe", Bow.Bow_Recipe.gold)
+    helm_recipe = Helm.Helm_Recipe("Helm recipe", Helm.Helm_Recipe.gold)
+    chest_recipe = Chest.Chest_Recipe("Chest recipe", Chest.Chest_Recipe.gold)
+    feet_recipe = Feet.Feet_Recipe("Feet recipe", Feet.Feet_Recipe.gold)
     
     
     #The game will continue until the player has no gold or gets 100k
@@ -225,7 +225,7 @@ def game_loop(day):
                 print ("Gold: " + str(player.gold) + "\n")
                 command = input("What do you wanna do?"+
                                 "\n1. Buy resources" +
-                                "\n2. Buy recipes\n")
+                                "\n2. Buy recipes (You can only buy 1 recipe per day!)\n")
                 if command == "1": #Let the player buy resources
                     def buy_resources():
                         os.system('clear') #Clear the previous console information and messages
@@ -289,7 +289,8 @@ def game_loop(day):
                                         "\n3. Bow recipe: " + str(bow_recipe.gold) +
                                         "\n4. Helm recipe: " + str(helm_recipe.gold) + 
                                         "\n5. Chest recipe: " + str(chest_recipe.gold) + 
-                                        "\n6. Feet recipe: " + str(feet_recipe.gold) + "\n")
+                                        "\n6. Feet recipe: " + str(feet_recipe.gold) + "\n" +
+                                        "\nWrite 'B' to get back and end you day!\n")
                         if command == "1": #Buy sword recipe
                             if player.gold >= sword_recipe.gold:
                                 player.gold -= sword_recipe.gold
@@ -338,6 +339,8 @@ def game_loop(day):
                                 print("\nYou do not have enough gold to buy this!")
                                 print(input("\nPress ENTER to continue!"))
                                 buy_recipes() #Get back to the recipes buy menu
+                        elif command == "B":
+                            pass
                         else:
                             print("\nChoose a right action!")
                             print(input("\nPress ENTER to continue!"))
