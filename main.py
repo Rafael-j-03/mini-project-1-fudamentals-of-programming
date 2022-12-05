@@ -1,5 +1,5 @@
 import os #Let he work with operating system functions
-from collections import deque
+import random #Random library - can set random numbers
 
 os.system('clear') #Clear the previous console information and messages
 
@@ -13,8 +13,8 @@ day = 0
 
 #Inventory and items
 class Player:
-    gold = 250
-    experience = 0
+    gold = 2500
+    experience = 1
     resources_inventory = []
     items_inventory = []
     
@@ -28,7 +28,7 @@ class Item:
     
     def display(self):
         print("Item:", self.name)
-        print("Sell value:", self.gold)
+        print("Average selling price:", self.gold)
         
     def sell(self):
         if (self.canSell == True):
@@ -75,7 +75,9 @@ class Gold(Item): #Gold
         
 class Sword(Item): #Sword
     canSell = True
-    gold = 400
+    gold = 800
+    successCrafting = 5
+    
     def __init__(self):
         super().__init__("Sword", self.gold)
         
@@ -84,7 +86,7 @@ class Sword(Item): #Sword
     
     class Sword_Recipe(Item): #Sword recipe
         canSell = False
-        gold = 150
+        gold = 200
 
         def display(self):
             print("Item:", self.name)
@@ -94,7 +96,9 @@ class Sword(Item): #Sword
 
 class Hammer(Item): #Hammer
     canSell = True
-    gold = 200
+    successCrafting = 4
+    gold = 600
+    
     def __init__(self):
         super().__init__("Hammer", self.gold)
         
@@ -113,7 +117,9 @@ class Hammer(Item): #Hammer
         
 class Bow(Item): #Bow
     canSell = True
-    gold = 150
+    successCrafting = 3
+    gold = 400
+    
     def __init__(self):
         super().__init__("Bow", self.gold)
         
@@ -132,7 +138,9 @@ class Bow(Item): #Bow
         
 class Helm(Item): #Helm
     canSell = True
-    gold = 100
+    gold = 400
+    successCrafting = 3
+    
     def __init__(self):
         super().__init__("Helm", self.gold)
     
@@ -151,7 +159,9 @@ class Helm(Item): #Helm
         
 class Chest(Item): #Chest
     canSell = True
-    gold = 225
+    gold = 1000
+    successCrafting = 6
+    
     def __init__(self):
         super().__init__("Chest", self.gold)
     
@@ -170,7 +180,9 @@ class Chest(Item): #Chest
         
 class Feet(Item): #Feet
     canSell = True
-    gold = 85
+    gold = 300
+    successCrafting = 3
+    
     def __init__(self):
         super().__init__("Feet", self.gold)
     
@@ -179,7 +191,7 @@ class Feet(Item): #Feet
 
     class Feet_Recipe(Item): #Feet recipe
         canSell = False
-        gold = 100
+        gold = 75
 
         def display(self):
             print("Item:", self.name)
@@ -207,13 +219,25 @@ def game_loop(day):
     helm_recipe = Helm.Helm_Recipe("Helm recipe", Helm.Helm_Recipe.gold)
     chest_recipe = Chest.Chest_Recipe("Chest recipe", Chest.Chest_Recipe.gold)
     feet_recipe = Feet.Feet_Recipe("Feet recipe", Feet.Feet_Recipe.gold)
+    recipes = [sword_recipe,hammer_recipe,bow_recipe,helm_recipe,chest_recipe,feet_recipe]
     
     
     #The game will continue until the player has no gold or gets 100k
-    while (player.gold >= 0) and (player.gold <= 100000):
+    while (player.gold > 0) and (player.gold <= 100000):
+        #Variables that need to be updated
+        woodInInventory = sum(isinstance(x, Wood) for x in player.resources_inventory)
+        leatherInInventory = sum(isinstance(x, Leather) for x in player.resources_inventory)
+        ironInInventory = sum(isinstance(x, Iron) for x in player.resources_inventory)
+        goldInInventory = sum(isinstance(x, Gold) for x in player.resources_inventory)
+        day += 1
+        #Player Craft Attempt
+        d10 = random.randint(1,10) #Ten-sided dice
+        playerCraftAttempt = player.experience * d10
+        
         os.system('clear') #Clear the previous console information and messages
-        day = day + 1
-        print("Day:",day,"\n")
+        
+        print("Day:",day,"\n") #Print the current day
+        
         command = input("What do you wanna do in this day?\n" +
                         "1. Buy Items\n"+
                         "2. Craft Items\n"+
@@ -356,59 +380,184 @@ def game_loop(day):
             shop()
             
         elif command == "2": #Let the player craft items
-            def crafting(day):
+            def crafting():
                 os.system('clear') #Clear the previous console information and messages
                 if sword_recipe in player.items_inventory:
-                        print("1. Sword (Need: 2 Woods and 3 Irons)")
-                elif hammer_recipe in player.items_inventory:
-                        print("2. Hammer")
-                elif bow_recipe in player.items_inventory:
-                        print("3. Bow")
-                elif helm_recipe in player.items_inventory:
-                        print("4. Helm")
-                elif chest_recipe in player.items_inventory:
-                        print("5. Chest")
-                elif feet_recipe in player.items_inventory:
-                        print("6. Feet")
-                else:
+                        print("1. Sword (Needed: 2 Woods and 3 Irons)")
+                if hammer_recipe in player.items_inventory:
+                        print("2. Hammer (Needed: 2 Woods and 4 Irons)")
+                if bow_recipe in player.items_inventory:
+                        print("3. Bow (Needed: 5 Woods, 1 Iron and 2 Leathers)")
+                if helm_recipe in player.items_inventory:
+                        print("4. Helm (Needed: 3 Irons and 1 Gold)")
+                if chest_recipe in player.items_inventory:
+                        print("5. Chest (Needed: 5 Irons and 2 Golds)")
+                if feet_recipe in player.items_inventory:
+                        print("6. Feet (Needed: 2 Irons and 2 Golds)")
+                        
+                #Check if any recipe is in the player's inventory
+                checkRecipes = any(n in recipes for n in player.items_inventory)
+                if checkRecipes is False:
                     print("You need a recipe to craft something!")
                     print(input("\nPress ENTER to continue"))
-                    day -= 1
-                    game_loop(day)
+                    pass
                     
-                def sword_craft():
-                    if int(sum(isinstance(x, Wood) for x in player.resources_inventory)) >= 2 and int(sum(isinstance(x, Iron) for x in player.resources_inventory)) >= 3: #If the player got the materials to craft then:
+                def sword_craft(): #Craft sword
+                    if int(woodInInventory) >= 2 and int(ironInInventory) >= 3: #If the player got the materials to craft then:
                         sword_materials = [myWood,myWood,myIron,myIron,myIron] #Materials needed to do the sword
                         for materials in sword_materials: #Remove the materials needed to do the sword
-                            while materials in player.resources_inventory:
+                            if materials in player.resources_inventory:
                                 player.resources_inventory.remove(materials)
-                        player.items_inventory.remove(sword_recipe)    
-                        
-                        player.items_inventory.append(sword)
+                        player.items_inventory.remove(sword_recipe)
+                        if playerCraftAttempt >= sword.successCrafting: #Success craft attempt
+                            player.items_inventory.append(sword)
+                            player.experience += 1
+                            print("\nYou have crafted a sword!")
+                            print(input("\nPress ENTER to continue"))
+                        if playerCraftAttempt < sword.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a sword!")
+                            print(input("\nPress ENTER to continue"))
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
+                            
+                def hammer_craft(): #Craft hammer
+                    if int(woodInInventory) >= 2 and int(ironInInventory) >= 4: #If the player got the materials to craft then:
+                        hammer_materials = [myWood,myWood,myIron,myIron,myIron,myIron] #Materials needed to do the hammer
+                        for materials in hammer_materials: #Remove the materials needed to do the hammer
+                            if materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(hammer_recipe)
+                        if playerCraftAttempt >= hammer.successCrafting: #Success craft attempt
+                            player.items_inventory.append(hammer)
+                            player.experience += 1
+                            print("\nYou have crafted a hammer!")
+                            print(input("\nPress ENTER to continue"))  
+                        if playerCraftAttempt < hammer.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a hammer!")
+                            print(input("\nPress ENTER to continue"))
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
+
+                def bow_craft(): #Craft bow
+                    if int(woodInInventory) >= 5 and int(ironInInventory) >= 1 and int(leatherInInventory) >= 2: #If the player got the materials to craft then:
+                        bow_materials = [myWood,myWood,myWood,myWood,myWood,ironInInventory,leatherInInventory, leatherInInventory] #Materials needed to do the bow
+                        for materials in bow_materials: #Remove the materials needed to do the bow
+                            if materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(bow_recipe)
+                        if playerCraftAttempt >= bow.successCrafting: #Success craft attempt
+                            player.items_inventory.append(bow)
+                            player.experience += 1
+                            print("\nYou have crafted a bow!")
+                            print(input("\nPress ENTER to continue"))
+                        if playerCraftAttempt < bow.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a bow!")
+                            print(input("\nPress ENTER to continue"))
                     else:
                         print("\nYou don't have all the materials to craft this!")
                         print(input("\nPress ENTER to continue"))
                         
-                command = input()
-                if (command == "1") and (sword_recipe in player.items_inventory):
-                    sword_craft()
-                else:
-                    print("Choose a right action!")
+                def helm_craft(): #Craft helm
+                    if int(ironInInventory) >= 3 and int(goldInInventory) >= 1: #If the player got the materials to craft then:
+                        helm_materials = [myIron,myIron,myIron,myGold] #Materials needed to do the helm
+                        for materials in helm_materials: #Remove the materials needed to do the helm
+                            if materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(helm_recipe)
+                        if playerCraftAttempt >= helm.successCrafting: #Success craft attempt
+                            player.items_inventory.append(helm)
+                            player.experience += 1
+                            print("\nYou have crafted a helm!")
+                            print(input("\nPress ENTER to continue"))  
+                        if playerCraftAttempt < helm.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a helm!")
+                            print(input("\nPress ENTER to continue"))
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
 
-            crafting(day)
+                def chest_craft(): #Craft chest
+                    if int(ironInInventory) >= 5 and int(goldInInventory) >= 2: #If the player got the materials to craft then:
+                        chest_materials = [myIron,myIron,myIron,myIron,myIron,myGold,myGold] #Materials needed to do the chest
+                        for materials in chest_materials: #Remove the materials needed to do the chest
+                            if materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(chest_recipe)
+                        if playerCraftAttempt >= chest.successCrafting: #Success craft attempt
+                            player.items_inventory.append(chest)
+                            player.experience += 1
+                            print("\nYou have crafted a chest!")
+                            print(input("\nPress ENTER to continue"))  
+                        if playerCraftAttempt < chest.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a chest!")
+                            print(input("\nPress ENTER to continue"))
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
+                        
+                def feet_craft(): #Craft feet
+                    if int(ironInInventory) >= 2 and int(goldInInventory) >= 2: #If the player got the materials to craft then:
+                        feet_materials = [myIron,myIron,myGold,myGold] #Materials needed to do the feet
+                        for materials in feet_materials: #Remove the materials needed to do the feet
+                            if materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(feet_recipe)
+                        if playerCraftAttempt >= feet.successCrafting: #Success craft attempt
+                            player.items_inventory.append(feet)
+                            player.experience += 1
+                            print("\nYou have crafted a feet!")
+                            print(input("\nPress ENTER to continue"))  
+                        if playerCraftAttempt < feet.successCrafting: #Failed craft attempt
+                            print("\nYou have failed to craft a feet!")
+                            print(input("\nPress ENTER to continue"))
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
+                
+                def choose_craft(): #Let the player select what we wants to craft
+                    print("\nWrite 'B' to get back home. (You will lose your day)")
+                    command = input()
+                    if (command == "1") and (sword_recipe in player.items_inventory):
+                            sword_craft()
+                    elif (command == "2") and (hammer_recipe in player.items_inventory):
+                            hammer_craft()
+                    elif (command == "3") and (bow_recipe in player.items_inventory):
+                            bow_craft()
+                    elif (command == "4") and (helm_recipe in player.items_inventory):
+                            helm_craft()
+                    elif (command == "5") and (chest_recipe in player.items_inventory):
+                            chest_craft()
+                    elif (command == "6") and (feet_recipe in player.items_inventory):
+                            feet_craft()
+                    elif command == "B":
+                        pass
+                    else:
+                        print("Choose a right action!")
+                        print(input("\nPress ENTER to continue"))
+                        crafting()
+                
+                if checkRecipes is True:
+                    choose_craft()
+                    
+            crafting()
                         
         elif command == "3": #Let the player sell his items
             pass
+        
         elif command == "4": #Show to the player his inventory
             os.system('clear') #Clear the previous console information and messages
             day -= 1
             print("Gold:",player.gold)
             print("-------")
+            print("Player level:",player.experience)
+            print("-------")
             print("Resources:\n"+
-                  "Wood: " + str(sum(isinstance(x, Wood) for x in player.resources_inventory)) + " /"+ 
-                  " Leather: " + str(sum(isinstance(x, Leather) for x in player.resources_inventory)) + " /" +
-                  " Iron: " + str(sum(isinstance(x, Iron) for x in player.resources_inventory)) + " /" +
-                  " Gold: " + str(sum(isinstance(x, Gold) for x in player.resources_inventory)))
+                  "Wood: " + str(woodInInventory) + " /" + 
+                  " Leather: " + str(leatherInInventory) + " /" +
+                  " Iron: " + str(ironInInventory) + " /" +
+                  " Gold: " + str(goldInInventory))
             print("-------")
             for item in Player.items_inventory:
                 item.display()
@@ -420,6 +569,6 @@ def game_loop(day):
             day -= 1
             print("\nChoose a right action!")
             print(input("\nPress ENTER to continue"))
-            game_loop(day)
+            pass
 
 game_loop(day)
