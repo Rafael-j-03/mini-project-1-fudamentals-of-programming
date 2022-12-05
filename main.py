@@ -356,7 +356,47 @@ def game_loop(day):
             shop()
             
         elif command == "2": #Let the player craft items
-            pass
+            def crafting(day):
+                os.system('clear') #Clear the previous console information and messages
+                if sword_recipe in player.items_inventory:
+                        print("1. Sword (Need: 2 Woods and 3 Irons)")
+                elif hammer_recipe in player.items_inventory:
+                        print("2. Hammer")
+                elif bow_recipe in player.items_inventory:
+                        print("3. Bow")
+                elif helm_recipe in player.items_inventory:
+                        print("4. Helm")
+                elif chest_recipe in player.items_inventory:
+                        print("5. Chest")
+                elif feet_recipe in player.items_inventory:
+                        print("6. Feet")
+                else:
+                    print("You need a recipe to craft something!")
+                    print(input("\nPress ENTER to continue"))
+                    day -= 1
+                    game_loop(day)
+                    
+                def sword_craft():
+                    if int(sum(isinstance(x, Wood) for x in player.resources_inventory)) >= 2 and int(sum(isinstance(x, Iron) for x in player.resources_inventory)) >= 3: #If the player got the materials to craft then:
+                        sword_materials = [myWood,myWood,myIron,myIron,myIron] #Materials needed to do the sword
+                        for materials in sword_materials: #Remove the materials needed to do the sword
+                            while materials in player.resources_inventory:
+                                player.resources_inventory.remove(materials)
+                        player.items_inventory.remove(sword_recipe)    
+                        
+                        player.items_inventory.append(sword)
+                    else:
+                        print("\nYou don't have all the materials to craft this!")
+                        print(input("\nPress ENTER to continue"))
+                        
+                command = input()
+                if (command == "1") and (sword_recipe in player.items_inventory):
+                    sword_craft()
+                else:
+                    print("Choose a right action!")
+
+            crafting(day)
+                        
         elif command == "3": #Let the player sell his items
             pass
         elif command == "4": #Show to the player his inventory
