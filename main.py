@@ -13,7 +13,7 @@ day = 0
 
 #Inventory and items
 class Player:
-    gold = 2500
+    gold = 250
     experience = 1
     resources_inventory = []
     items_inventory = []
@@ -221,6 +221,10 @@ def game_loop(day):
     feet_recipe = Feet.Feet_Recipe("Feet recipe", Feet.Feet_Recipe.gold)
     recipes = [sword_recipe,hammer_recipe,bow_recipe,helm_recipe,chest_recipe,feet_recipe]
     
+    player.items_inventory.append(sword)
+    player.items_inventory.append(sword)
+    player.items_inventory.append(sword)
+    player.items_inventory.append(sword)
     
     #The game will continue until the player has no gold or gets 100k
     while (player.gold > 0) and (player.gold <= 100000):
@@ -258,7 +262,7 @@ def game_loop(day):
                                             "\n2. Leather: " + str(myLeather.gold) +
                                             "\n3. Iron: " + str(myIron.gold) +
                                             "\n4. Gold: " + str(myGold.gold) + "\n" + 
-                                            "\nWrite 'B' to get back and end you day!\n")
+                                            "\nOr write 'B' to get back and end you day!\n")
                         if command == "1": #Buy wood
                             if player.gold >= myWood.gold:
                                 player.gold -= myWood.gold
@@ -314,7 +318,7 @@ def game_loop(day):
                                         "\n4. Helm recipe: " + str(helm_recipe.gold) + 
                                         "\n5. Chest recipe: " + str(chest_recipe.gold) + 
                                         "\n6. Feet recipe: " + str(feet_recipe.gold) + "\n" +
-                                        "\nWrite 'B' to get back and end you day!\n")
+                                        "\nOr write 'B' to get back and end you day!\n")
                         if command == "1": #Buy sword recipe
                             if player.gold >= sword_recipe.gold:
                                 player.gold -= sword_recipe.gold
@@ -517,7 +521,7 @@ def game_loop(day):
                         print(input("\nPress ENTER to continue"))
                 
                 def choose_craft(): #Let the player select what we wants to craft
-                    print("\nWrite 'B' to get back home. (You will lose your day)")
+                    print("\nOr write 'B' to get back home. (You will lose your day)")
                     command = input()
                     if (command == "1") and (sword_recipe in player.items_inventory):
                             sword_craft()
@@ -544,7 +548,57 @@ def game_loop(day):
             crafting()
                         
         elif command == "3": #Let the player sell his items
-            pass
+            os.system('clear') #Clear the previous console information and messages
+            clients = 3 #Random number of clients per day
+            sellable_items = [sword,hammer,bow,helm,chest,feet]
+            items = []
+    
+            def offer(): #Client offer
+                items = []
+                for i in sellable_items:
+                    if i in player.items_inventory:
+                        items.append(i)
+                if any(items):
+                    client_choice = random.choice(items) #Item that the client is going to choose
+                    client_offer = client_choice.gold * random.uniform(0.5,1.5) #Initial client's offer
+                    if client_choice in player.items_inventory: #Check if the item is in the player's inventory
+                        def proposal_decision():
+                            os.system('clear') #Clear the previous console information and messages
+                            print("Client: I offer you this - " + str(round(client_offer))  + " Gold - " + "for: " + client_choice.name)
+                            command = input("\nDo you want to accept it? (Y/N)\n")
+                            if command == "Y":
+                                player.gold += round(client_offer)
+                                print("\nCurrent Gold:",player.gold)
+                                player.items_inventory.remove(client_choice)
+                                print(input("\nPress ENTER to continue"))
+                            elif command == "N":
+                                pass
+                            else:
+                                print("\nChoose a right action!")
+                                print(input("\nPress ENTER to continue"))
+                                proposal_decision()
+                    else:
+                        pass
+                            
+                    proposal_decision()
+                
+            
+                return items
+                    
+            def selling_items(items): #Selling items
+                if clients > 0: #If there's client on the shop:
+                    for i in range(clients):
+                        offer()
+                    else: #If the player got nothing to sell
+                        os.system('clear') #Clear the previous console information and messages
+                        print("You have got nothing left to sell!")
+                        print(input("\nPress ENTER to get back to the main menu"))
+                
+                if clients == 0: #If there's no clients on the shop:
+                    print("You have no clients today.")
+                    print(input("\nPress ENTER to get back to the main menu"))
+            
+            selling_items(items) #Execute the function to sell items
         
         elif command == "4": #Show to the player his inventory
             os.system('clear') #Clear the previous console information and messages
@@ -559,7 +613,7 @@ def game_loop(day):
                   " Iron: " + str(ironInInventory) + " /" +
                   " Gold: " + str(goldInInventory))
             print("-------")
-            for item in Player.items_inventory:
+            for item in player.items_inventory:
                 item.display()
                 print("-------")
             print(input("\n\nPress ENTER to get back to the main menu"))
