@@ -29,17 +29,9 @@ class Item:
     def display(self):
         print("Item:", self.name)
         print("Average selling price:", self.gold)
-        
-    def sell(self):
-        if (self.canSell == True):
-            return True
-        else:
-            return False
-    
+
 class Wood(Item): #Wood
-    canSell = False
     gold = 2
-    canSell = False
     def __init__(self):
         super().__init__("Wood", self.gold)
     
@@ -47,7 +39,6 @@ class Wood(Item): #Wood
         return super().sell()
         
 class Leather(Item): #Leather
-    canSell = False
     gold = 3
     def __init__(self):
         super().__init__("Leather", self.gold)
@@ -56,7 +47,6 @@ class Leather(Item): #Leather
         return super().sell()
         
 class Iron(Item): #Iron
-    canSell = False
     gold = 5 
     def __init__(self):
         super().__init__("Iron", self.gold)
@@ -65,7 +55,6 @@ class Iron(Item): #Iron
         return super().sell()
     
 class Gold(Item): #Gold
-    canSell = False
     gold = 20
     def __init__(self):
         super().__init__("Gold", self.gold)
@@ -74,7 +63,6 @@ class Gold(Item): #Gold
         return super().sell()
         
 class Sword(Item): #Sword
-    canSell = True
     gold = 800
     successCrafting = 5
     
@@ -83,6 +71,15 @@ class Sword(Item): #Sword
         
     def sell(self):
         return super().sell()
+    
+    class Sword_Recipe(Item): #Sword recipe
+        gold = 200
+
+        def display(self):
+            print("Item:", self.name)
+        
+        def sell(self):
+            return super().sell()
     
     class Sword_Recipe(Item): #Sword recipe
         canSell = False
@@ -95,7 +92,6 @@ class Sword(Item): #Sword
             return super().sell()
 
 class Hammer(Item): #Hammer
-    canSell = True
     successCrafting = 4
     gold = 600
     
@@ -106,7 +102,6 @@ class Hammer(Item): #Hammer
         return super().sell()
 
     class Hammer_Recipe(Item): #Hammer recipe
-        canSell = False
         gold = 150
 
         def display(self):
@@ -116,7 +111,6 @@ class Hammer(Item): #Hammer
             return super().sell()
         
 class Bow(Item): #Bow
-    canSell = True
     successCrafting = 3
     gold = 400
     
@@ -127,7 +121,6 @@ class Bow(Item): #Bow
         return super().sell()
         
     class Bow_Recipe(Item): #Bow recipe
-        canSell = False
         gold = 100
 
         def display(self):
@@ -136,8 +129,11 @@ class Bow(Item): #Bow
         def sell(self):
             return super().sell()
         
-class Helm(Item): #Helm
-    canSell = True
+class Armor(Item):
+    def __init__(self, name, gold):
+        super().__init__(name, gold)
+        
+class Helm(Armor): #Helm
     gold = 400
     successCrafting = 3
     
@@ -147,8 +143,7 @@ class Helm(Item): #Helm
     def sell(self):
         return super().sell()
     
-    class Helm_Recipe(Item): #Helm recipe
-        canSell = False
+    class Helm_Recipe(Armor): #Helm recipe
         gold = 100
 
         def display(self):
@@ -157,8 +152,7 @@ class Helm(Item): #Helm
         def sell(self):
             return super().sell()
         
-class Chest(Item): #Chest
-    canSell = True
+class Chest(Armor): #Chest
     gold = 1000
     successCrafting = 6
     
@@ -168,8 +162,7 @@ class Chest(Item): #Chest
     def sell(self):
         return super().sell()
     
-    class Chest_Recipe(Item): #Chest recipe
-        canSell = False
+    class Chest_Recipe(Armor): #Chest recipe
         gold = 250
 
         def display(self):
@@ -178,8 +171,7 @@ class Chest(Item): #Chest
         def sell(self):
             return super().sell()
         
-class Feet(Item): #Feet
-    canSell = True
+class Feet(Armor): #Feet
     gold = 300
     successCrafting = 3
     
@@ -189,8 +181,7 @@ class Feet(Item): #Feet
     def sell(self):
         return super().sell()
 
-    class Feet_Recipe(Item): #Feet recipe
-        canSell = False
+    class Feet_Recipe(Armor): #Feet recipe
         gold = 75
 
         def display(self):
@@ -220,11 +211,6 @@ def game_loop(day):
     chest_recipe = Chest.Chest_Recipe("Chest recipe", Chest.Chest_Recipe.gold)
     feet_recipe = Feet.Feet_Recipe("Feet recipe", Feet.Feet_Recipe.gold)
     recipes = [sword_recipe,hammer_recipe,bow_recipe,helm_recipe,chest_recipe,feet_recipe]
-    
-    player.items_inventory.append(sword)
-    player.items_inventory.append(sword)
-    player.items_inventory.append(sword)
-    player.items_inventory.append(sword)
     
     #The game will continue until the player has no gold or gets 100k
     while (player.gold > 0) and (player.gold <= 100000):
@@ -549,52 +535,88 @@ def game_loop(day):
                         
         elif command == "3": #Let the player sell his items
             os.system('clear') #Clear the previous console information and messages
-            clients = 3 #Random number of clients per day
+            clients = random.randint(0,player.experience) #Random number of clients per day, more experience can get more clients
             sellable_items = [sword,hammer,bow,helm,chest,feet]
-            items = []
+            items = [] #Sellable items in the player's inventory
+            for i in sellable_items:
+                if i in player.items_inventory:
+                    items.append(i)
     
             def offer(): #Client offer
-                items = []
-                for i in sellable_items:
-                    if i in player.items_inventory:
-                        items.append(i)
                 if any(items):
                     client_choice = random.choice(items) #Item that the client is going to choose
-                    client_offer = client_choice.gold * random.uniform(0.5,1.5) #Initial client's offer
-                    if client_choice in player.items_inventory: #Check if the item is in the player's inventory
-                        def proposal_decision():
+                    client_offer = client_choice.gold * random.uniform(0.7,1.3) #Initial client's offer
+                    def proposal_decision(): #Initial offer from the client
+                        if client_choice in player.items_inventory: #Check if the item is in the player's inventory
                             os.system('clear') #Clear the previous console information and messages
                             print("Client: I offer you this - " + str(round(client_offer))  + " Gold - " + "for: " + client_choice.name)
                             command = input("\nDo you want to accept it? (Y/N)\n")
-                            if command == "Y":
+                            if command == "Y": #If the player accepts it then:
                                 player.gold += round(client_offer)
                                 print("\nCurrent Gold:",player.gold)
                                 player.items_inventory.remove(client_choice)
                                 print(input("\nPress ENTER to continue"))
-                            elif command == "N":
-                                pass
+                            elif command == "N": #If the player refuses then:
+                                def bargain(): #Negotiate a new deal
+                                    command = input("\nDo you want to bargain? (Y/N)\n")
+                                    if command == "Y": #If the player wants to negotiate:
+                                        threshold = client_offer * random.uniform(1,1.3)
+                                        round(threshold)
+                                        def player_offer():
+                                            counter_offer = input("\nMake your offer: ")
+                                            try:
+                                                counter_offer = int(counter_offer)
+                                                if (counter_offer < threshold):
+                                                    player.gold += round(counter_offer)
+                                                    print("\nThe client has accepted your offer.")
+                                                    print("\nCurrent Gold:",player.gold)
+                                                    player.items_inventory.remove(client_choice)
+                                                    print(input("\nPress ENTER to continue"))
+                                                else:
+                                                    print("\nThe customer refused your offer and left.")
+                                                    print(input("\nPress ENTER to continue"))
+                                            except ValueError:
+                                                print('\nThe provided value is not a number!')
+                                                print(input("\nPress ENTER to continue"))
+                                                player_offer()
+                                            
+                                        player_offer()
+                                    elif command == "N": #If the player does not wants to negotiate:
+                                        pass
+                                    else: 
+                                        print("\nChoose a right action!")
+                                        print(input("\nPress ENTER to continue"))
+                                        bargain()
+                                bargain()
                             else:
                                 print("\nChoose a right action!")
                                 print(input("\nPress ENTER to continue"))
                                 proposal_decision()
-                    else:
-                        pass
-                            
-                    proposal_decision()
-                
+                        else:
+                            pass
+                        
+                    proposal_decision() #Executes proposal
             
                 return items
                     
             def selling_items(items): #Selling items
-                if clients > 0: #If there's client on the shop:
+                if (clients > 0) and (any(items)): #If there's client on the shop:
                     for i in range(clients):
-                        offer()
-                    else: #If the player got nothing to sell
-                        os.system('clear') #Clear the previous console information and messages
-                        print("You have got nothing left to sell!")
+                        if any(items):
+                            offer()
+                        else:
+                            pass
+                    os.system('clear') #Clear the previous console information and messages
+                    if any(items):
+                        print("You have no more clients today!")
                         print(input("\nPress ENTER to get back to the main menu"))
+                        
+                elif not items: #If the player got nothing to sell
+                    os.system('clear') #Clear the previous console information and messages
+                    print("You have got nothing to sell!")
+                    print(input("\nPress ENTER to get back to the main menu"))
                 
-                if clients == 0: #If there's no clients on the shop:
+                elif clients == 0: #If there's no clients on the shop:
                     print("You have no clients today.")
                     print(input("\nPress ENTER to get back to the main menu"))
             
