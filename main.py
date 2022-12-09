@@ -4,7 +4,7 @@ import random #Random library - can set random numbers
 os.system('clear') #Clear the previous console information and messages
 
 #Game explanation
-print("\033[1;37mIn this game you must get a profit of 50k in gold to win, or if you lose all your money you lose.")
+print("\033[1;37mIn this game you must get up to 50k in gold to win, by buying resources, crafting items and after selling them, or if you lose all your money you lose.")
 print(input("\n\033[1;33mPress ENTER to continue"))
 os.system('clear') #Clear the previous console information and messages
 
@@ -527,7 +527,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a sword!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                             
                 def hammer_craft(): #Craft hammer
@@ -546,7 +546,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a hammer!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
 
                 def bow_craft(): #Craft bow
@@ -565,7 +565,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a bow!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                         
                 def helm_craft(): #Craft helm
@@ -584,7 +584,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a helm!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
 
                 def chest_craft(): #Craft chest
@@ -603,7 +603,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a chest!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                         
                 def feet_craft(): #Craft feet
@@ -622,7 +622,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a feet!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                         
                 def gem_craft(): #Craft gem
@@ -641,7 +641,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a gem!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def pickaxe_craft(): #Craft pickaxe
@@ -660,7 +660,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a pickaxe!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def axe_craft(): #Craft axe
@@ -695,7 +695,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a shield!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def fishing_rod_craft(): #Craft fishing rod
@@ -714,7 +714,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a fishing rod!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def wizard_book_craft(): #Craft wizard_book
@@ -733,7 +733,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a wizard book!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def vault_craft(): #Craft vault
@@ -752,7 +752,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a vault!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def shuriken_craft(): #Craft shuriken
@@ -771,7 +771,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a shuriken!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def nunchucks_craft(): #Craft nunchucks
@@ -790,7 +790,7 @@ def game_loop(day):
                             print("\n\033[0;31mYou have failed to craft a nunchucks!")
                             print(input("\n\033[1;33mPress ENTER to continue"))
                     else:
-                        print("\n\033[0;31m\033[0;31mYou don't have all the materials to craft this!")
+                        print("\n\033[0;31m\033[0;31mYou don't have all the materials needed to craft this!")
                         print(input("\n\033[1;33mPress ENTER to continue"))
                 
                 def choose_craft(): #Let the player select what we wants to craft
