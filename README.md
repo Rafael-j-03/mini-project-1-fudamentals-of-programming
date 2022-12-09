@@ -1,5 +1,3 @@
-# mini-project-1-fudamentals-of-programming
-
 # FP1 - Mini Project 1
 
 ### Objective of the Project:
